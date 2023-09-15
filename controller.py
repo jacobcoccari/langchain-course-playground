@@ -21,6 +21,7 @@ class Controller:
         )
         self.conversation = ConversationChain(llm=chat, memory=memory)
         self.discord_api_key = discord_api_key
+        self.step = "start"
 
     def diagnose_problem():
         pass
