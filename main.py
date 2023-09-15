@@ -7,13 +7,9 @@ load_dotenv()
 
 
 def main():
-    discord_client = DiscordClient(
-        os.environ["DISCORD_TOKEN"],
-    )
-
     controller = Controller(
         os.environ["OPENAI_API_KEY"],
-        discord_client,
+        os.environ["DISCORD_TOKEN"],
     )
 
     controller.run()

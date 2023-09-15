@@ -3,22 +3,14 @@ import discord
 
 
 class DiscordClient(discord.Client):
-    def __init__(self, discord_api_key):
+    def __init__(self, query_function):
         # adding intents module to prevent intents error in __init__ method in newer versions of Discord.py
         intents = (
             discord.Intents.default()
         )  # Select all the intents in your bot settings as it's easier
         intents.message_content = True
         super().__init__(intents=intents)
-        self.discord_api_key = discord_api_key
-
-    def my_run(self):
-        if self.query == None:
-            raise Exception("Query function is not set")
-        self.run(self.discord_api_key)
-
-    def set_query_function(self, query_fn):
-        self.query = query_fn
+        self.query = query_function
 
     # Async function on_ready. Based on DISCORD API DOCUMENTATION
     # This function will be called when the bot is logging in.

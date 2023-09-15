@@ -5,10 +5,11 @@ from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 from langchain.output_parsers import PydanticOutputParser
 from models import Name, BookingNumber
+from discord_bot import DiscordClient
 
 
 class Controller:
-    def __init__(self, openai_api_key, discord_client) -> None:
+    def __init__(self, openai_api_key, discord_api_key) -> None:
         memory = ConversationBufferMemory()
         chat = ChatOpenAI(
             model="gpt-3.5-turbo",
@@ -19,7 +20,7 @@ class Controller:
             {"system": "You are a helpful AI assistant"}, {"output": ""}
         )
         self.conversation = ConversationChain(llm=chat, memory=memory)
-        self.discord_client = discord_client
+        self.discord_api_key = discord_api_key
 
     def diagnose_problem():
         pass
@@ -44,5 +45,5 @@ class Controller:
         return output
 
     def run(self):
-        self.discord_client.set_query_function(self.query)
-        self.discord_client.my_run()
+        discord_client = DiscordClient(self.query)
+        discord_client.run(self.discord_api_key)
