@@ -1,40 +1,22 @@
 from discord_bot import DiscordClient
 import os
 from dotenv import load_dotenv
+from controller import Controller
 
 load_dotenv()
 
 
 def main():
-    # option 1: DO THIS
+    discord_client = DiscordClient(
+        os.environ["DISCORD_TOKEN"],
+    )
 
     controller = Controller(
-        {
-            "OPENAPI_KEY": os.environ["OPENAPI_KEY"],
-        }
+        os.environ["OPENAI_API_KEY"],
+        discord_client,
     )
 
-    # controller.query("")
-
-    client = DiscordClient(
-        {
-            "dicord_token": os.environ["DISCORD_TOKEN"],
-        },
-        controller,
-    )
-
-    client.run()
-
-    # option 2:
-
-    client = DiscordClient(
-        {
-            "openapi_key": os.environ["OPENAPI_KEY"],
-            "dicord_token": os.environ["DISCORD_TOKEN"],
-        }
-    )
-
-    # option 3:
+    controller.run()
 
 
 if __name__ == "__main__":

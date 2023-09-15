@@ -1,24 +1,24 @@
 # the Discord Python API
 import discord
 
-# OpenAI Stuff
-from langchain.output_parsers import PydanticOutputParser
-from controller import query
-
-# this is my Hugging Face profile link
-
 
 class DiscordClient(discord.Client):
-    def __init__(self):
+    def __init__(self, discord_api_key):
         # adding intents module to prevent intents error in __init__ method in newer versions of Discord.py
         intents = (
             discord.Intents.default()
         )  # Select all the intents in your bot settings as it's easier
         intents.message_content = True
         super().__init__(intents=intents)
+        self.discord_api_key = discord_api_key
 
-    # If I define a list of object names inside of a python list, then I can iterate through them and pass them to the
-    # "query" function.
+    def my_run(self):
+        if self.query == None:
+            raise Exception("Query function is not set")
+        self.run(self.discord_api_key)
+
+    def set_query_function(self, query_fn):
+        self.query = query_fn
 
     # Async function on_ready. Based on DISCORD API DOCUMENTATION
     # This function will be called when the bot is logging in.
@@ -48,7 +48,7 @@ class DiscordClient(discord.Client):
         # while the bot is waiting on a response from the model
         # set the its status as typing for user-friendliness
         async with message.channel.typing():
-            response = query(payload)
+            response = self.query(payload["inputs"]["text"])
         bot_response = response
 
         # we may get ill-formed response if the model hasn't fully loaded
