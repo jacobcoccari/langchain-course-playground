@@ -52,9 +52,12 @@ class Controller:
             output_parser=RouterOutputParser(),
         )
         router_chain = LLMRouterChain.from_llm(self.llm, router_prompt)
-        print(router_chain)
-        return router_chain(query)
-
+        router_chain_decision = router_chain(query)['destination']
+        if router_chain_decision = None:
+            return "I'm sorry, I did not get that. Would you like help booking a flight, changing a flight, or finding a lost bag?"
+        else:
+            return router_chain_decision
+        
     def change_flight():
         pass
 
@@ -73,10 +76,12 @@ class Controller:
         )
         _input = prompt.format_prompt(query=query).to_string()
         if self.step == "start":
-            self.diagnose_problem(_input)
-        output = self.conversation.predict(input=_input)
-
-        return output
+            problem = self.diagnose_problem(_input)
+            self.step = problem
+            
+        else:
+            output = self.conversation.predict(input=_input)
+            return output
 
     def run(self):
         discord_client = DiscordClient(self.query)
