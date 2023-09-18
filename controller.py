@@ -1,5 +1,9 @@
 from langchain.chat_models import ChatOpenAI
-from langchain.prompts import ChatPromptTemplate, PromptTemplate
+from langchain.prompts import (
+    ChatPromptTemplate,
+    PromptTemplate,
+    SystemMessagePromptTemplate,
+)
 from langchain.chains import LLMChain
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
@@ -14,18 +18,27 @@ from langchain.chains import ConversationChain
 from langchain.chains.llm import LLMChain
 from langchain.prompts import PromptTemplate
 import langchain
+from langchain.schema import SystemMessage
+
+from langchain.chat_models import ChatOpenAI
+from langchain.schema import SystemMessage
+from langchain.prompts import (
+    ChatPromptTemplate,
+    HumanMessagePromptTemplate,
+    MessagesPlaceholder,
+)
 
 
 class Controller:
     def __init__(self, openai_api_key, discord_api_key) -> None:
-        memory = ConversationBufferMemory()
+        self.memory = ConversationBufferMemory()
         self.llm = ChatOpenAI(
             model="gpt-3.5-turbo",
             openai_api_key=openai_api_key,
             temperature=0.0,
         )
-        langchain.debug = True
-        self.conversation = ConversationChain(llm=self.llm, memory=memory)
+        # langchain.debug = True
+        self.conversation = ConversationChain(llm=self.llm, memory=self.memory)
         self.discord_api_key = discord_api_key
         self.step = "start"
 
@@ -34,10 +47,14 @@ class Controller:
         prompt_infos = [
             {
                 "name": "book_flight",
-                "description": "Used to help a user book a new flight or flights",
+                "description": "Used to help a user book a new flight",
             },
             {
-                "name": "lost_bag",
+                "name": "change_flight",
+                "description": "Used to help a user change their flight",
+            },
+            {
+                "name": "find_bag",
                 "description": "Used to help a user find their lost bag",
             },
         ]
@@ -52,24 +69,48 @@ class Controller:
             output_parser=RouterOutputParser(),
         )
         router_chain = LLMRouterChain.from_llm(self.llm, router_prompt)
-        router_chain_decision = router_chain(query)['destination']
-        if router_chain_decision = None:
-            return "I'm sorry, I did not get that. Would you like help booking a flight, changing a flight, or finding a lost bag?"
-        else:
-            return router_chain_decision
-        
+        router_chain_decision = router_chain(query)["destination"]
+        if router_chain_decision == None:
+            return "start"
+        return router_chain_decision
+        # if router_chain_decision == None:
+        #     return "start"
+        # else:
+        #     return router_chain_decision
+
     def change_flight():
         pass
 
     def book_flight():
         pass
 
-    def find_bag():
-        pass
-        # Take a user input and retrun a response
+    def find_bag(self):
+        prompt = ChatPromptTemplate.from_messages(
+            [
+                SystemMessage(
+                    content="You are a chatbot having a conversation with a human."
+                ),  # The persistent system prompt
+                MessagesPlaceholder(
+                    variable_name="chat_history"
+                ),  # Where the memory will be stored.
+                HumanMessagePromptTemplate.from_template(
+                    "{human_input}"
+                ),  # Where the human input will injected
+            ]
+        )
+        memory = ConversationBufferMemory(
+            memory_key="chat_history", return_messages=True
+        )
+        chat_llm_chain = LLMChain(
+            llm=self.llm,
+            prompt=prompt,
+            verbose=True,
+            memory=memory,
+        )
+        return chat_llm_chain.predict(human_input="Hi there my friend"), memory
 
+    # Take a user input and retrun a response
     def query(self, query):
-        print("-------------------")
         prompt = PromptTemplate(
             template="{query}",
             input_variables=["query"],
@@ -78,10 +119,23 @@ class Controller:
         if self.step == "start":
             problem = self.diagnose_problem(_input)
             self.step = problem
-            
-        else:
-            output = self.conversation.predict(input=_input)
-            return output
+            return problem
+        elif self.step == "find_bag":
+            helper = self.find_bag()
+            return helper
+            # print(self.memory)
+            # self.memory.add_ai_message("is this working?")
+            # print(self.memory)
+            # self.memory.save_context(
+            #     {
+            #         "input": "You are a helpful AI assistant. Please collect the following information: \n 1) Name and 2) Booking number"
+            #     }
+            # )
+        # else:
+        #     output = self.conversation.predict(input=_input)
+        #     print("--------------------------")
+        #     print(self.memory)
+        #     return output
 
     def run(self):
         discord_client = DiscordClient(self.query)
