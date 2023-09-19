@@ -29,16 +29,7 @@ class DiscordClient(discord.Client):
         if channel_id == None:
             raise Exception("Channel not found")
         channel = self.get_channel(channel_id)
-        await channel.send(
-            "Welcome to Beehive Air's Beehive Bot! What can we help you with today?"
-        )
 
-        # send a request to the model without caring about the response
-        # just so that the model wakes up and starts loading
-        # self.query({'inputs': {'text': 'Hello!'}})
-
-    # Based on DISCORD API DOCUMENTATION
-    #
     async def on_message(self, message):
         """
         this function is called whenever the bot sees a message in a channel
