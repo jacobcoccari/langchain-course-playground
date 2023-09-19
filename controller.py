@@ -31,7 +31,9 @@ from langchain.prompts import (
 
 class Controller:
     def __init__(self, openai_api_key, discord_api_key) -> None:
-        self.memory = ConversationBufferMemory()
+        self.memory = ConversationBufferMemory(
+            memory_key="chat_history", return_messages=True
+        )
         self.llm = ChatOpenAI(
             model="gpt-3.5-turbo",
             openai_api_key=openai_api_key,
@@ -83,32 +85,9 @@ class Controller:
 
     def book_flight():
         pass
-
-    def find_bag(self):
-        prompt = ChatPromptTemplate.from_messages(
-            [
-                SystemMessage(
-                    content="You are a chatbot having a conversation with a human."
-                ),  # The persistent system prompt
-                MessagesPlaceholder(
-                    variable_name="chat_history"
-                ),  # Where the memory will be stored.
-                HumanMessagePromptTemplate.from_template(
-                    "{human_input}"
-                ),  # Where the human input will injected
-            ]
-        )
-        memory = ConversationBufferMemory(
-            memory_key="chat_history", return_messages=True
-        )
-        chat_llm_chain = LLMChain(
-            llm=self.llm,
-            prompt=prompt,
-            verbose=True,
-            memory=memory,
-        )
-        return chat_llm_chain.predict(human_input="Hi there my friend"), memory
-
+    
+    def find_bag(self, query):
+        
     # Take a user input and retrun a response
     def query(self, query):
         prompt = PromptTemplate(
@@ -120,9 +99,8 @@ class Controller:
             problem = self.diagnose_problem(_input)
             self.step = problem
             return problem
-        elif self.step == "find_bag":
-            helper = self.find_bag()
-            return helper
+        while self.step == "find_bag":
+            return self.find_bag(_input)
             # print(self.memory)
             # self.memory.add_ai_message("is this working?")
             # print(self.memory)
