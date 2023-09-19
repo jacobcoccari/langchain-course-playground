@@ -23,7 +23,7 @@ class DiscordClient(discord.Client):
 
         channel_id = None
         for channel in self.get_all_channels():
-            if channel.name == "beehivebot":
+            if channel.name == "beehive-gpt":
                 channel_id = channel.id
                 break
         if channel_id == None:
