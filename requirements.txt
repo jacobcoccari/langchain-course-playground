@@ -5,6 +5,7 @@ async-timeout==4.0.3
 attrs==23.1.0
 certifi==2023.7.22
 charset-normalizer==3.2.0
+chroma==0.2.0
 dataclasses-json==0.5.14
 discord==2.3.2
 python-dotenv == 1.0.0

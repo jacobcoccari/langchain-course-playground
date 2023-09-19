@@ -9,32 +9,25 @@ from langchain.chains import LLMChain
 from langchain.memory import ConversationBufferMemory
 from discord_bot import DiscordClient
 from langchain.schema import SystemMessage
+import langchain
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.text_splitter import CharacterTextSplitter
+from langchain.vectorstores import Chroma
+
+
+langchain.debug = True
 
 
 class Controller:
     def __init__(self, openai_api_key, discord_api_key) -> None:
-        prompt = ChatPromptTemplate.from_messages(
-            [
-                SystemMessage(
-                    content="You are a helpful AI assistant. Include tables, code snippets, and concise descriptions to help the user."
-                ),  # The persistent system prompt
-                MessagesPlaceholder(variable_name="chat_history"),
-                HumanMessagePromptTemplate.from_template(
-                    "{human_input}"
-                ),  # Where the human input will injected
-            ]
-        )
         self.llm = ChatOpenAI(
             model="gpt-4",
             openai_api_key=openai_api_key,
             temperature=0.0,
         )
-        self.memory = ConversationBufferMemory(
-            memory_key="chat_history", return_messages=True
-        )
+        self.memory = ConversationBufferMemory(return_messages=True)
         self.conversation = LLMChain(
             llm=self.llm,
-            prompt=prompt,
             memory=self.memory,
         )
         # langchain.debug = True
