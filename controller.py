@@ -20,7 +20,7 @@ class Controller:
 
         self.qa = RetrievalQA.from_chain_type(
             llm=self.llm,
-            chain_type="stuff",
+            chain_type="map_reduce",
             retriever=self.retriever,
             return_source_documents=True,
         )
