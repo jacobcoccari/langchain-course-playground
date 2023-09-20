@@ -19,7 +19,10 @@ class Controller:
         ).as_retriever()
 
         self.qa = RetrievalQA.from_chain_type(
-            llm=self.llm, chain_type="map_reduce", retriever=self.retriver
+            llm=self.llm,
+            chain_type="map_reduce",
+            retriever=self.retriver,
+            return_source_documents=True,
         )
 
     def query(self, query):
@@ -29,7 +32,18 @@ class Controller:
         )
         _input = prompt.format_prompt(query=query).to_string()
         search = self.qa({"query": _input})
-        return search["result"]
+        unique_source_documents = set(
+            [
+                source_document.metadata["source"]
+                for source_document in search["source_documents"]
+            ]
+        )
+        source_string = "\n"
+        for source_document in unique_source_documents:
+            source_string = source_string + source_document + "\n"
+
+        full_response = search["response"] + source_string
+        return full_response
 
     def run(self):
         discord_client = DiscordClient(self.query)
