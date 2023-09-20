@@ -1,10 +1,10 @@
 from discord_bot import DiscordClient
 from langchain.llms import OpenAI
 from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.prompts import PromptTemplate
 from langchain.retrievers.document_compressors import LLMChainExtractor
 from langchain.chains import RetrievalQA
 from langchain.vectorstores import Chroma
+from langchain.callbacks.manager import tracing_v2_enabled
 
 
 class Controller:
@@ -13,7 +13,7 @@ class Controller:
         self.embedding_function = OpenAIEmbeddings()
         self.llm = OpenAI(temperature=0, model="gpt-3.5-turbo-instruct")
         self.compressor = LLMChainExtractor.from_llm(self.llm)
-        self.retriver = Chroma(
+        self.retriever = Chroma(
             persist_directory="./langchain_documents_db/",
             embedding_function=self.embedding_function,
         ).as_retriever()
@@ -21,7 +21,7 @@ class Controller:
         self.qa = RetrievalQA.from_chain_type(
             llm=self.llm,
             chain_type="stuff",
-            retriever=self.retriver,
+            retriever=self.retriever,
             return_source_documents=True,
         )
 
