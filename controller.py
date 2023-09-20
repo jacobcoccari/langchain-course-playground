@@ -1,5 +1,5 @@
 from discord_bot import DiscordClient
-from langchain.chat_models import ChatOpenAI
+from langchain.llms import OpenAI
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.prompts import PromptTemplate
 from langchain.retrievers.document_compressors import LLMChainExtractor
@@ -11,7 +11,7 @@ class Controller:
     def __init__(self, openai_api_key, discord_api_key) -> None:
         self.discord_api_key = discord_api_key
         self.embedding_function = OpenAIEmbeddings()
-        self.llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo")
+        self.llm = OpenAI(temperature=0, model="gpt-3.5-turbo-instruct")
         self.compressor = LLMChainExtractor.from_llm(self.llm)
         self.retriver = Chroma(
             persist_directory="./langchain_documents_db/",
