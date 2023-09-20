@@ -2,3 +2,4 @@
 venv/
 .vscode/
 __pycache__/
+langchain_documents_db

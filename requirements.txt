@@ -5,7 +5,7 @@ async-timeout==4.0.3
 attrs==23.1.0
 certifi==2023.7.22
 charset-normalizer==3.2.0
-chroma==0.2.0
+chromadb==0.4.11
 dataclasses-json==0.5.14
 discord==2.3.2
 python-dotenv == 1.0.0
@@ -26,6 +26,7 @@ python-dotenv==1.0.0
 PyYAML==6.0.1
 requests==2.31.0
 SQLAlchemy==2.0.20
+tiktoken==0.5.1
 tenacity==8.2.3
 typing-inspect==0.9.0
 typing_extensions==4.7.1
