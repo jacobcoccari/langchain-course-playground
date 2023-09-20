@@ -16,7 +16,7 @@ class Controller:
         self.retriver = Chroma(
             persist_directory="./langchain_documents_db/",
             embedding_function=self.embedding_function,
-        ).as_retriever(search_type="mmr")
+        ).as_retriever()
 
         self.qa = RetrievalQA.from_chain_type(
             llm=self.llm,
@@ -26,12 +26,7 @@ class Controller:
         )
 
     def query(self, query):
-        prompt = PromptTemplate(
-            template="{query}",
-            input_variables=["query"],
-        )
-        _input = prompt.format_prompt(query=query).to_string()
-        search = self.qa({"query": _input})
+        search = self.qa({"query": query})
         source_string = self.format_source_string(search)
         full_response = search["result"] + source_string
         return full_response
