@@ -16,11 +16,11 @@ class Controller:
         self.retriver = Chroma(
             persist_directory="./langchain_documents_db/",
             embedding_function=self.embedding_function,
-        ).as_retriever()
+        ).as_retriever(search_type="mmr")
 
         self.qa = RetrievalQA.from_chain_type(
             llm=self.llm,
-            chain_type="map_reduce",
+            chain_type="stuff",
             retriever=self.retriver,
             return_source_documents=True,
         )
@@ -32,18 +32,21 @@ class Controller:
         )
         _input = prompt.format_prompt(query=query).to_string()
         search = self.qa({"query": _input})
+        source_string = self.format_source_string(search)
+        full_response = search["result"] + source_string
+        return full_response
+
+    def format_source_string(self, search):
         unique_source_documents = set(
             [
                 source_document.metadata["source"]
                 for source_document in search["source_documents"]
             ]
         )
-        source_string = "\n"
+        source_string = "\n--------------------\nSources:"
         for source_document in unique_source_documents:
-            source_string = source_string + source_document + "\n"
-
-        full_response = search["response"] + source_string
-        return full_response
+            source_string = source_string + "```" + source_document + "```"
+        return source_string
 
     def run(self):
         discord_client = DiscordClient(self.query)
