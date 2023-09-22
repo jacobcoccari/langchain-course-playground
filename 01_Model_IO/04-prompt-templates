@@ -19,6 +19,7 @@ def main():
     request = chat_prompt.format_prompt(comedian="Jerry Seinfeld")
 
     # print(request)
+    print(request.input_variables)
 
     response = chat(request.to_messages())
     # print(response)
