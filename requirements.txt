@@ -5,14 +5,14 @@ async-timeout==4.0.3
 attrs==23.1.0
 certifi==2023.7.22
 charset-normalizer==3.2.0
-chromadb==0.4.11
+chromadb==0.4.8
 dataclasses-json==0.5.14
 discord==2.3.2
 python-dotenv == 1.0.0
 frozenlist==1.4.0
 greenlet==2.0.2
 idna==3.4
-langchain==0.0.285
+langchain==0.0.272
 langsmith==0.0.35
 marshmallow==3.20.1
 multidict==6.0.4
@@ -20,7 +20,7 @@ mypy-extensions==1.0.0
 numexpr==2.8.5
 numpy==1.25.2
 packaging==23.1
-pydantic==2.3.0
+pydantic==1.10.12
 pydantic_core==2.6.3
 python-dotenv==1.0.0
 PyYAML==6.0.1
