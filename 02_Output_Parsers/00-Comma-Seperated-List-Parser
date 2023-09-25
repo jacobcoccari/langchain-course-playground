@@ -1,0 +1,32 @@
+import os
+from dotenv import load_dotenv
+from langchain.output_parsers import CommaSeparatedListOutputParser
+from langchain.prompts import (
+    PromptTemplate,
+    ChatPromptTemplate,
+    HumanMessagePromptTemplate,
+)
+from langchain.llms import OpenAI
+from langchain.chat_models import ChatOpenAI
+
+load_dotenv()
+api_key = os.getenv("OPENAI_API_KEY")
+
+
+def main():
+    model = ChatOpenAI(openai_api_key=api_key)
+    output_parser = CommaSeparatedListOutputParser()
+    prompt = ChatPromptTemplate.from_messages(
+        ["List five {subject}.\n{format_instructions}"]
+    )
+    input = prompt.format_prompt(
+        subject="ice cream flavors",
+        format_instructions=output_parser.get_format_instructions(),
+    ).to_messages()
+    output = model(input).content
+    result = output_parser.parse(output)
+    print(result)
+
+
+if __name__ == "__main__":
+    main()
