@@ -22,11 +22,12 @@ def main():
             ("ai", "{output}"),
         ]
     )
+    # Pass these both to the template, and it will format it for us.
     few_shot_prompt = FewShotChatMessagePromptTemplate(
         example_prompt=example_prompt,
         examples=examples,
     )
-
+    # Now, we pass it to a regular chat prompt template along with the system template and the human template for whatever we want.
     final_prompt = ChatPromptTemplate.from_messages(
         [
             ("system", "You are a wondrous wizard of math."),
