@@ -3,35 +3,59 @@ from langchain.chat_models import ChatOpenAI
 from dotenv import load_dotenv
 import os
 load_dotenv()
+from langchain.pydantic_v1 import BaseModel, Field, validator
+from langchain.output_parsers import PydanticOutputParser
 
 openai_api_key = os.getenv("OPENAI_API_KEY")
 
+class Joke(BaseModel):
+    setup: str = Field(description="question to set up a joke")
+    punchline: str = Field(description="answer to resolve the joke")
+
+    # You can add custom validation logic easily with Pydantic.
+    @validator("setup")
+    def question_ends_with_question_mark(cls, field):
+        print("penis")
+        if field[-1] != "?":
+            raise ValueError("Badly formed question!")
+        return field
+
+
+
+
 def main():
     model = ChatOpenAI(openai_api_key=openai_api_key)
-    prompt = ChatPromptTemplate.from_template("tell me a joke about {foo}")
-    functions = [
-        {
-        "name": "joke",
-        "description": "A joke",
-        "parameters": {
-            "type": "object",
-            "properties": {
-            "setup": {
-                "type": "string",
-                "description": "The setup for the joke"
-            },
-            "punchline": {
-                "type": "string",
-                "description": "The punchline for the joke"
-            }
-            },
-            "required": ["setup", "punchline"]
-        }
-        }
-    ]
-    chain = prompt | model.bind(function_call= {"name": "joke"}, functions= functions)
-    result = chain.invoke({"foo": "bears"}, config={})
+    parser = PydanticOutputParser(pydantic_object=Joke)
+    template = "tell me a joke about {foo}\n{format_instructions}"
+    chat_template = ChatPromptTemplate.from_template(template)
+    chain = chat_template | model | parser
+    result = chain.invoke({"foo": "bears", "format_instructions": parser.get_format_instructions()}, config={})
     print(result)
+
+    # prompt = ChatPromptTemplate.from_template("tell me a joke about {foo}")
+    # functions = [
+    #     {
+    #     "name": "joke",
+    #     "description": "A joke",
+    #     "parameters": {
+    #         "type": "object",
+    #         "properties": {
+    #         "setup": {
+    #             "type": "string",
+    #             "description": "The setup for the joke"
+    #         },
+    #         "punchline": {
+    #             "type": "string",
+    #             "description": "The punchline for the joke"
+    #         }
+    #         },
+    #         "required": ["setup", "punchline"]
+    #     }
+    #     }
+    # ]
+    # chain = prompt | model.bind(function_call= {"name": "joke"}, functions= functions)
+    # result = chain.invoke({"foo": "bears"}, config={})
+    # print(result)
 
 
 if __name__ == "__main__":
