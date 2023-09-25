@@ -1,12 +1,14 @@
-from langchain.prompts import ChatPromptTemplate
-from langchain.chat_models import ChatOpenAI
-from dotenv import load_dotenv
 import os
 load_dotenv()
+openai_api_key = os.getenv("OPENAI_API_KEY")
+
+
+from langchain.prompts import ChatPromptTemplate
+from langchain.chat_models import ChatOpenAI
 from langchain.pydantic_v1 import BaseModel, Field, validator
 from langchain.output_parsers import PydanticOutputParser
+from dotenv import load_dotenv
 
-openai_api_key = os.getenv("OPENAI_API_KEY")
 
 class Joke(BaseModel):
     setup: str = Field(description="question to set up a joke")
@@ -31,31 +33,6 @@ def main():
     chain = chat_template | model | parser
     result = chain.invoke({"foo": "bears", "format_instructions": parser.get_format_instructions()}, config={})
     print(result)
-
-    # prompt = ChatPromptTemplate.from_template("tell me a joke about {foo}")
-    # functions = [
-    #     {
-    #     "name": "joke",
-    #     "description": "A joke",
-    #     "parameters": {
-    #         "type": "object",
-    #         "properties": {
-    #         "setup": {
-    #             "type": "string",
-    #             "description": "The setup for the joke"
-    #         },
-    #         "punchline": {
-    #             "type": "string",
-    #             "description": "The punchline for the joke"
-    #         }
-    #         },
-    #         "required": ["setup", "punchline"]
-    #     }
-    #     }
-    # ]
-    # chain = prompt | model.bind(function_call= {"name": "joke"}, functions= functions)
-    # result = chain.invoke({"foo": "bears"}, config={})
-    # print(result)
 
 
 if __name__ == "__main__":
