@@ -7,7 +7,7 @@ load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
 
 def main():
-    model = ChatOpenAI(openai_api_key=openai_api_key).bind(stop=["\n"]  )
+    model = ChatOpenAI(openai_api_key=openai_api_key).bind(stop=["\n"] )
     prompt_template = ChatPromptTemplate.from_template("tell me a joke about {topic}")
     chain = prompt_template | model
     result = chain.invoke({"topic": "bears"})

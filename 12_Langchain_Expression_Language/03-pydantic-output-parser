@@ -15,8 +15,8 @@ class Name(BaseModel):
 def main():
     model = ChatOpenAI(openai_api_key=openai_api_key).bind(functions = Name)
     parser = PydanticOutputParser(pydantic_object=Name)
-    print(type(parser.get_format_instructions()))
-    template = "who pioneered the theory of relativity?" + parser.get_format_instructions()
+    template = f"who pioneered the theory of relativity? " + parser.get_format_instructions()
+    print(template )
     prompt_template = ChatPromptTemplate.from_template(template)
     print(prompt_template)
     # chain = prompt_template | model
