@@ -1,0 +1,23 @@
+from langchain.prompts import ChatPromptTemplate
+from langchain.chat_models import ChatOpenAI
+from dotenv import load_dotenv
+import os
+from langchain.schema.runnable import RunnableMap
+
+load_dotenv()
+
+openai_api_key = os.getenv("OPENAI_API_KEY")
+
+def main():
+    model = ChatOpenAI(openai_api_key=openai_api_key)
+    chain1 = ChatPromptTemplate.from_template("tell me a joke about {topic}") | model
+    chain2 = ChatPromptTemplate.from_template("write a short (2 line) poem about {topic}") | model
+    combined = RunnableMap({
+        "joke": chain1,
+        "poem": chain2,
+    })
+    result = combined.invoke({"topic": "bears"})
+    print(result)
+
+if __name__ == "__main__":
+    main()
