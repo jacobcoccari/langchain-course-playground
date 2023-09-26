@@ -16,7 +16,7 @@ model = ChatOpenAI(
 
 def main():
     output_parser = DatetimeOutputParser()
-    system_prompt = "Only respond in datetime formats."
+    system_prompt = "Please only return the datetime."
     human_prompt = "Answer the user's question: \n {question} \n {format_instructions}"
     prompt_template = ChatPromptTemplate.from_messages(
         [
