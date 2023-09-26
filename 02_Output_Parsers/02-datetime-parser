@@ -10,13 +10,15 @@ load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
 model = ChatOpenAI(
     openai_api_key=api_key,
+    temperature=0,
+    model="gpt-3.5-turbo",
 )
 
 
 def main():
     output_parser = DatetimeOutputParser()
-    system_prompt = "Do not return any output except for a datetime format."
-    human_prompt = "{question} \n {format_instructions}"
+    system_prompt = "Only respond in datetime formats."
+    human_prompt = "Answer the user's question: \n {question} \n {format_instructions}"
     prompt_template = ChatPromptTemplate.from_messages(
         [
             system_prompt,
@@ -24,13 +26,12 @@ def main():
         ]
     )
     input = prompt_template.format_prompt(
-        question="What date did world war two end?",
+        question="On what date did world war two end?",
         format_instructions=output_parser.get_format_instructions(),
     ).to_messages()
     output = model(input).content
     result = output_parser.parse(output)
     print(result)
-    print(type(result))
 
 
 if __name__ == "__main__":
