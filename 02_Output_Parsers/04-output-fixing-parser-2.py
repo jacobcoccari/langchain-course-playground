@@ -1,5 +1,10 @@
 # https://python.langchain.com/docs/modules/model_io/output_parsers/retry
 
+from dotenv import load_dotenv
+load_dotenv()
+
+from langsmith import Client
+
 from langchain.prompts import (
     PromptTemplate,
     ChatPromptTemplate,
@@ -31,6 +36,13 @@ parser = PydanticOutputParser(pydantic_object=Action)
 prompt = ChatPromptTemplate.from_messages([template])
 
 request = prompt.format_prompt(query = "who is leo decaprio's girlfriend?", 
-                               format_instructions=parser.get_format_instructions(), ).to_messages()
+                                format_instructions=parser.get_format_instructions(),).to_messages()
 
-print(request)
+bad_response = '{"action": "search"}'
+
+# parser.parse(bad_response)
+
+# this will cause confusion because the parser does not expect what to put for action_input
+# this actually worked, lol
+fix_parser = OutputFixingParser.from_llm(parser=parser, llm=ChatOpenAI(model='gpt-3.5-turbo', verbose=True))
+print(fix_parser.parse(bad_response))

@@ -13,7 +13,6 @@ from langchain.schema import (
 from langchain.chat_models import ChatOpenAI
 
 load_dotenv()
-api_key = os.getenv("OPENAI_API_KEY")
 model = ChatOpenAI(openai_api_key=api_key)
 
 
