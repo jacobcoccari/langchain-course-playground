@@ -8,8 +8,8 @@ load_dotenv()
 
 def initialize_session_state():
     if "openai_model" not in st.session_state:
-        st.session_state["openai_model"] = "gpt-4"
-
+        st.session_state["openai_model"] = "gpt-3.5-turbo"
+        
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
@@ -37,6 +37,7 @@ def prepare_assistant_messages():
 
 
 def generate_assistant_response(assistant_messages):
+    print(assistant_messages)
     response = openai.ChatCompletion.create(
         model=st.session_state["openai_model"], messages=assistant_messages
     )
