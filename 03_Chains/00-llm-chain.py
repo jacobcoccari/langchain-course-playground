@@ -35,7 +35,9 @@ input_list = [
 # Just like before, we can also use the .generate method to get more information about our calls.
 # Can be called on one to many inputs. However, even a single input must be in a list of dictionaries.
 
-result = llm_chain.generate([{"world_event": "the cold war"}])
-print(result)
+# result = llm_chain.generate([{"world_event": "the cold war"}])
+# print(result)
 
-# result_list = llm_chain.generate(input_list)
+# Side note: this must just inherit a call the chatopenai....
+result_list = llm_chain.generate(input_list)
+print(result_list)
