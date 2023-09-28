@@ -5,11 +5,15 @@ import openai
 
 load_dotenv()
 
+
 def generate_assistant_response():
     response = openai.ChatCompletion.create(
         model=st.session_state["openai_model"], messages=st.session_state.messages
     )
-    return response.choices[0].message["content"]
+    return response
+
+
+# .choices[0].message["content"]
 
 
 def main():
@@ -17,7 +21,7 @@ def main():
     openai.api_key = os.getenv("OPENAI_API_KEY")
     if "openai_model" not in st.session_state:
         st.session_state["openai_model"] = "gpt-3.5-turbo"
-        
+
     if "messages" not in st.session_state:
         st.session_state.messages = []
     for message in st.session_state.messages:
@@ -37,6 +41,7 @@ def main():
         st.session_state.messages.append(
             {"role": "assistant", "content": assistant_response}
         )
+        st.session_state.messages
 
 
 if __name__ == "__main__":

@@ -4,4 +4,4 @@ memory = ConversationBufferMemory()
 memory.chat_memory.add_user_message("hi!")
 memory.chat_memory.add_ai_message("what's up?")
 
-print(memory.chat_memory.messages)
+print(memory.buffer)
