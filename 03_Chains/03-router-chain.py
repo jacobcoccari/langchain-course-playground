@@ -9,31 +9,31 @@ from langchain.prompts import PromptTemplate
 from langchain.chains.router.llm_router import LLMRouterChain, RouterOutputParser
 from langchain.chains.router.multi_prompt_prompt import MULTI_PROMPT_ROUTER_TEMPLATE
 
-physics_template = """You are a very smart physics professor. \
-You are great at answering questions about physics in a concise and easy to understand manner. \
-When you don't know the answer to a question you admit that you don't know.
+chemistry_template = """You are a very smart chemistry professor. \
+Answer the student's question concisely and clearly \ 
+If you do not know the answer, say so.
 
 Here is a question:
 {input}"""
 
-
-math_template = """You are a very good mathematician. You are great at answering math questions. \
-You are so good because you are able to break down hard problems into their component parts, \
-answer the component parts, and then put them together to answer the broader question.
+biology_template = """You are a very smart biology professor. \
+Answer the student's question concisely and clearly \ 
+If you do not know the answer, say so.
 
 Here is a question:
 {input}"""
+
 
 prompt_infos = [
     {
-        "name": "physics",
-        "description": "Good for answering questions about physics",
-        "prompt_template": physics_template,
+        "name": "chemistry",
+        "description": "Good for answering questions about chemistry",
+        "prompt_template": chemistry_template,
     },
     {
-        "name": "math",
-        "description": "Good for answering math questions",
-        "prompt_template": math_template,
+        "name": "biology",
+        "description": "Good for answering biology questions",
+        "prompt_template": biology_template,
     },
 ]
 
