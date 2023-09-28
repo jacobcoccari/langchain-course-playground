@@ -2,17 +2,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from langchain.pydantic_v1 import BaseModel, Field
+from langchain.pydantic_v1 import BaseModel, Field, validator
 from langchain.chat_models import ChatOpenAI
-from langchain.chains.openai_functions import (
-    create_openai_fn_chain,
-    create_structured_output_chain,
-)
+from langchain.chains.openai_functions import create_structured_output_chain
 from typing import Optional
 from langchain.prompts import ChatPromptTemplate
 import langchain
-
-# langchain.debug = True
 
 
 class Person(BaseModel):
@@ -21,6 +16,10 @@ class Person(BaseModel):
     name: str = Field(..., description="The person's name")
     age: int = Field(..., description="The person's age")
     fav_food: Optional[str] = Field(None, description="The person's favorite food")
+
+    @validator("fav_food")
+    def is_valid_food(cls, field):
+        raise ValueError("This is not a valid food")
 
 
 # If we pass in a model explicitly, we need to make sure it supports the OpenAI function-calling API.
@@ -44,6 +43,11 @@ chain = create_structured_output_chain(
     llm,
     prompt,
 )
+
+# result = chain.run("Sally is 13")
+
+# print(result)
+
 result = chain.apply(
     [
         {"input": "Sally is 13"},
