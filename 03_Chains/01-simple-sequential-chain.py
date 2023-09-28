@@ -45,7 +45,7 @@ from langchain.chains import SimpleSequentialChain
 
 overall_chain = SimpleSequentialChain(
     chains=[synopsis_chain, review_chain],
-    verbose=True,
 )
 
 review = overall_chain.run("strange roomate")
+print(review)
