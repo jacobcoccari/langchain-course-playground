@@ -5,3 +5,6 @@ memory.chat_memory.add_user_message("hi!")
 memory.chat_memory.add_ai_message("what's up?")
 
 print(memory.buffer)
+print(type(memory.buffer))
+
+print(memory.buffer_as_messages)
