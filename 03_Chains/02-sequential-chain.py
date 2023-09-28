@@ -51,7 +51,13 @@ overall_chain = SequentialChain(
 )
 
 # .run is not supported for SequentialChain since there is more than one output key, .generate not supportede
-result = overall_chain.predict(
+result = overall_chain(
+    {"title": "Tragedy at sunset on the beach", "era": "Victorian England"}""
+)
+print(result)
+
+# .run is not supported for SequentialChain since there is more than one output key, .generate not supportede
+result = overall_chain.apply(
     [
         {"title": "Tragedy at sunset on the beach", "era": "Victorian England"},
         {"title": "Tragedy at sunset on the beach", "era": "Modern Broadway"},

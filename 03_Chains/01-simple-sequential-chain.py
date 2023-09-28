@@ -5,9 +5,10 @@ load_dotenv()
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import LLMChain
 from langchain.prompts import ChatPromptTemplate
-import langchain
 
-langchain.debug = True
+# import langchain
+
+# langchain.debug = True
 
 # This is an LLMChain to write a synopsis given a title of a play.
 
@@ -47,5 +48,13 @@ overall_chain = SimpleSequentialChain(
     chains=[synopsis_chain, review_chain],
 )
 
-review = overall_chain.run("strange roomate")
+# review = overall_chain("strange roomate")
+# print(review)
+
+review = overall_chain.apply(
+    [
+        {"input": "strange roomate"},
+        {"input": "pull my finger"},
+    ]
+)
 print(review)
