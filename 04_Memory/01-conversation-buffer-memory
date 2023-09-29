@@ -1,10 +1,13 @@
 from langchain.memory import ConversationBufferMemory
 
-memory = ConversationBufferMemory()
-memory.chat_memory.add_user_message("hi!")
-memory.chat_memory.add_ai_message("what's up?")
+# For chat models, we want to set return_messages = True
+# This is helpful because instead of just stuffing it in all to one place, it actually returns the specific objects.
+memory = ConversationBufferMemory(return_messages=True)
+# Input is considered the user message, and output is considered the AI message.
+memory.save_context(
+    {"input": "My name is jacob"},
+    {"output": "Hi Jacob, nice to meet you."},
+)
 
-print(memory.buffer)
-print(type(memory.buffer))
-
-print(memory.buffer_as_messages)
+print(memory)
+print(memory.load_memory_variables({}))
