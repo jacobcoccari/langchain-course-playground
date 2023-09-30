@@ -1,3 +1,4 @@
+# I recommend using LLMChain when you need to get the highest level of customization
 from langchain.prompts import ChatPromptTemplate
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import LLMChain
