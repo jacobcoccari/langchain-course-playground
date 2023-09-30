@@ -28,7 +28,7 @@ prompt = ChatPromptTemplate.from_messages(
 
 memory = ConversationBufferMemory(
     return_messages=True,
-    memory_key="history",
+    # memory_key="history",
 )
 
 llm = ChatOpenAI()
@@ -37,7 +37,7 @@ chat_llm_chain = ConversationChain(
     llm=llm,
     verbose=True,
     memory=memory,
-    prompt=prompt,
+    # prompt=prompt,
 )
 
 chat_llm_chain.predict(input="Hi there my friend")

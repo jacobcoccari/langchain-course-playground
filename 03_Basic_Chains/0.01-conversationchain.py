@@ -1,0 +1,1 @@
+# I would ONLY RECOMMEND using ConversationChain in the EXTREMELY SIMPLE case that you are just creating a simple chatbot that needs no extra context, requires no extra variables, and is simply a chatbot using the base model. However, since it is extremely easy for these applications, and common in the documentation, I decided to create a quick lecture here.
