@@ -1,0 +1,8 @@
+
+
+[1m> Entering new LLMChain chain...[0m
+Prompt after formatting:
+[32;1m[1;3mHuman: 1 + 2 = [0m
+
+[1m> Finished chain.[0m
+[32m2023-09-30 12:48:11.646[0m | [1mINFO    [0m | [36m__main__[0m:[36m<module>[0m:[36m31[0m - [1m3[0m
