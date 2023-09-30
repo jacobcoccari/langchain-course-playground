@@ -9,7 +9,11 @@ from langchain.memory import ConversationBufferMemory
 memory = ConversationBufferMemory(return_messages=True)
 
 llm = ChatOpenAI()
-conversation = LLMChain(llm=llm, verbose=True, memory=ConversationBufferMemory())
+conversation = LLMChain(
+    llm=llm,
+    verbose=True,
+    memory=ConversationBufferMemory(),
+)
 
 result = conversation.predict(input="Hi there!")
 
