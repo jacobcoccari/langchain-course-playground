@@ -1,19 +1,18 @@
-import os
 from dotenv import load_dotenv
-from langchain.chat_models import ChatOpenAI
-
-from langchain.prompts import ChatPromptTemplate
+import openai
+import os
 
 load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
-def main():
-    chat = ChatOpenAI()
+def chat(message, model="gpt-3.5-turbo"):
+    response = openai.ChatCompletion.create(
+        model=model,
+        messages=[{"role": "user", "content": message}],
+    )
+    return response.choices[0].message["content"]
 
-    prompt = "The [insert] refers to rule by the father."
-    result = chat([prompt])
-    print(result)
 
-
-if __name__ == "__main__":
-    main()
+result = chat("The [blank] refers to the rule by the father.")
+print(result)
