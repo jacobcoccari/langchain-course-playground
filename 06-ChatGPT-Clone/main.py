@@ -45,8 +45,8 @@ def main():
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
-
     prompt = st.chat_input("What is up?")
+
     if prompt:
         save_chat_history(prompt, st.session_state.messages)
 
