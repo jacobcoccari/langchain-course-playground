@@ -53,6 +53,8 @@ query = "Answer the user query: \n {format_instructions} \n what is the name of 
 
 
 parser = PydanticOutputParser(pydantic_object=Name)
+print(parser.get_format_instructions())
+
 prompt = ChatPromptTemplate.from_messages([query])
 input = prompt.format_prompt(
     query=query,
