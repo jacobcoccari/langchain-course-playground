@@ -1,3 +1,5 @@
+from typing import Any, Dict, Optional
+from uuid import UUID
 import streamlit as st
 from dotenv import load_dotenv
 from langchain.chat_models import ChatOpenAI
@@ -5,6 +7,8 @@ from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.callbacks import StreamlitCallbackHandler
+from langchain.callbacks.base import BaseCallbackHandler
+
 
 load_dotenv()
 model = ChatOpenAI(
@@ -13,21 +17,29 @@ model = ChatOpenAI(
 memory = ConversationBufferMemory()
 
 
+class TokenPrinter(BaseCallbackHandler):
+    # This tells the method that we will call it every time the LLM returns us a new token.
+    def __init__(self) -> None:
+        self.full_response = ""
+        self.container = st.chat_message("assistant")
+        self.message_placeholder = st.empty()
+
+    def on_llm_new_token(self, token: str, **kwargs) -> None:
+        self.full_response += token
+        self.message_placeholder.markdown(self.full_response + "▌")
+
+    def on_chain_end(self):
+        return self.container
+
+
 def generate_assistant_response(prompt):
-    full_response = []
     chain = ConversationChain(
         llm=model,
         memory=memory,
     )
-    full_response = ""
-    st_callback = StreamlitCallbackHandler(
-        parent_container=st.chat_message("assistant"),
-        thought_labeler=None,
-    )
-    st_callback.container = None
-    print(st_callback.container)
-    response = chain.run(prompt, callbacks=[st_callback])
-    return full_response
+    callback = TokenPrinter()
+    chain.run(prompt, callbacks=[callback])
+    # return response
 
 
 def save_chat_history(prompt, messages):
