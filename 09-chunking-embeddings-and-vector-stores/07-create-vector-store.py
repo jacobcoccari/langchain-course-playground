@@ -9,7 +9,7 @@ speech = loader.load()[0].page_content
 
 
 text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=400,
+    chunk_size=450,
     chunk_overlap=50,
 )
 
@@ -24,7 +24,6 @@ from langchain.embeddings import HuggingFaceInstructEmbeddings
 
 embedding_function = HuggingFaceInstructEmbeddings(
     model_name="hkunlp/instructor-base",
-    query_instruction="Represent the query for retrieval: ",
 )
 
 db = Chroma.from_documents(
