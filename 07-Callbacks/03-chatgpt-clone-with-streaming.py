@@ -4,10 +4,13 @@ from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+from langchain.callbacks import StreamlitCallbackHandler
 
 load_dotenv()
-model = ChatOpenAI()
-memory = ConversationBufferMemory(return_messages=True)
+model = ChatOpenAI(
+    streaming=True,
+)
+memory = ConversationBufferMemory()
 
 
 def generate_assistant_response(prompt):
@@ -15,17 +18,15 @@ def generate_assistant_response(prompt):
     chain = ConversationChain(
         llm=model,
         memory=memory,
-        callbacks=[StreamingStdOutCallbackHandler()],
     )
-    streaming_box = st.empty()
-    for resp in chain.run(prompt):
-        # if wordstream is not None
-        if resp:
-            full_response.append(resp)
-            result = "".join(full_response).strip()
-            # This streaming_box is a st.empty from the display
-            with st.chat_message("user"):
-                st.markdown(result)
+    full_response = ""
+    st_callback = StreamlitCallbackHandler(
+        parent_container=st.chat_message("assistant"),
+        thought_labeler=None,
+    )
+    st_callback.container = None
+    print(st_callback.container)
+    response = chain.run(prompt, callbacks=[st_callback])
     return full_response
 
 
