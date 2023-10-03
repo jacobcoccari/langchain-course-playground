@@ -4,3 +4,4 @@ venv/
 __pycache__/
 .log
 langchain
+speech-embeddings-db
