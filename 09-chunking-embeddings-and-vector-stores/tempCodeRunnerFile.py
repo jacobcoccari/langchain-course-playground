@@ -1,2 +1,1 @@
-
-sentence = "3D ActionSLAM: wearable person trackin
+./09-chunking-embeddings-and-vector-stores/speech-embeddings-db
