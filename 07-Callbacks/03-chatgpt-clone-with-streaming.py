@@ -11,12 +11,22 @@ memory = ConversationBufferMemory(return_messages=True)
 
 
 def generate_assistant_response(prompt):
-    conversation = ConversationChain(
+    full_response = []
+    chain = ConversationChain(
         llm=model,
         memory=memory,
+        callbacks=[StreamingStdOutCallbackHandler()],
     )
-    response = conversation.predict(input=prompt)
-    return response
+    streaming_box = st.empty()
+    for resp in chain.run(prompt):
+        # if wordstream is not None
+        if resp:
+            full_response.append(resp)
+            result = "".join(full_response).strip()
+            # This streaming_box is a st.empty from the display
+            with st.chat_message("user"):
+                st.markdown(result)
+    return full_response
 
 
 def save_chat_history(prompt, messages):
