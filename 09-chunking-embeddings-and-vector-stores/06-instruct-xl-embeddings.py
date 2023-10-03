@@ -6,7 +6,8 @@ from InstructorEmbedding import INSTRUCTOR
 
 model = INSTRUCTOR("hkunlp/instructor-base")  # downloading a pre-trained model.
 sentence = "3D ActionSLAM: wearable person tracking in multi-floor environments"
-embeddings = model.encode([sentence])
+instruction = "Represent the Science title:"
+embeddings = model.encode([sentence, instruction])
 print(embeddings)
 print(len(embeddings))
 print(len(embeddings[0]))
