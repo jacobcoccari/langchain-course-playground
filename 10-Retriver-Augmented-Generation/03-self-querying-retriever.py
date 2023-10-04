@@ -93,7 +93,7 @@ metadata_field_info = [
     ),
 ]
 
-model = OpenAI()
+model = OpenAI(temperature=0)
 description = "Brief summary of a movie"
 retriever = SelfQueryRetriever.from_llm(
     model,
@@ -104,6 +104,10 @@ retriever = SelfQueryRetriever.from_llm(
 )
 
 
-query = "What video has the most total views?"
+# query = "What are some movies about dinosaurs?"
+# response = retriever.get_relevant_documents(query)
+# print(response)
+
+query = "I want to watch a movie with a rating greater than 8.5"
 response = retriever.get_relevant_documents(query)
 print(response)
