@@ -16,7 +16,8 @@ db = Chroma(
     embedding_function=embedding_function,
 )
 
-retriever = db.as_retriever()
+# We can see that by setting a different k for our retriever, we get a different and more comprehensive result.
+retriever = db.as_retriever(search_kwargs={"k": 5})
 
 model = ChatOpenAI()
 
