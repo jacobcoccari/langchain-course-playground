@@ -5,3 +5,4 @@ __pycache__/
 .log
 langchain
 speech-embeddings-db
+mr-beast-db
