@@ -6,3 +6,4 @@ __pycache__/
 langchain
 speech-embeddings-db
 crash-course-db
+movies-db
