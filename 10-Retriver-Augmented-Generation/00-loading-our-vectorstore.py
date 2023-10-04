@@ -4,17 +4,11 @@ from langchain.vectorstores import Chroma
 from langchain.embeddings import HuggingFaceInstructEmbeddings
 
 url_list = [
-    "https://www.youtube.com/watch?v=0e3GPea1Tyg",
-    "https://www.youtube.com/watch?v=zxYjTTXc-J8",
-    "https://www.youtube.com/watch?v=9bqk6ZUsKyA",
-    "https://www.youtube.com/watch?v=iogcY_4xGjo",
-    "https://www.youtube.com/watch?v=r7zJ8srwwjk",
-    "https://www.youtube.com/watch?v=GLoeAJUcz38",
-    "https://www.youtube.com/watch?v=fMfipiV_17o",
-    "https://www.youtube.com/watch?v=1WEAJ-DFkHE",
-    "https://www.youtube.com/watch?v=yXWw0_UfSFg",
-    "https://www.youtube.com/watch?v=gHzuabZUd6c",
-    "https://www.youtube.com/watch?v=QxGVgXf_LNk",
+    "https://www.youtube.com/watch?v=8Nn5uqE3C9w",
+    "https://www.youtube.com/watch?v=szxPar0BcMo",
+    "https://www.youtube.com/watch?v=jvnU0v6hcUo",
+    "https://www.youtube.com/watch?v=UUCEeC4f6ts",
+    "https://www.youtube.com/watch?v=0LsrkWDCvxg",
 ]
 
 documents = []
@@ -39,10 +33,10 @@ embedding_function = HuggingFaceInstructEmbeddings(
 db = Chroma.from_documents(
     documents,
     embedding_function,
-    persist_directory="./10-Retriver-Augmented-Generation/mr-beast-db",
+    persist_directory="./10-Retriver-Augmented-Generation/crash-course-db",
 )
 
 db.persist()
 
-docs = db.similarity_search("what was the type of car that cost $1?", k=2)
+docs = db.similarity_search("who was ashoka?", k=2)
 print(docs)
