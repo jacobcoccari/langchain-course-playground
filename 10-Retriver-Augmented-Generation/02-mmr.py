@@ -26,6 +26,6 @@ qa = RetrievalQA.from_chain_type(
     retriever=retriever,
 )
 
-query = "who was ashoka?"
+query = "who was ghengis khan?"
 response = qa.run(query)
 print(response)

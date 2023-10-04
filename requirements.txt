@@ -17,6 +17,7 @@ idna==3.4
 InstructorEmbedding==1.0.1
 langchain==0.0.272
 langsmith==0.0.35
+lark==1.1.7
 loguru==0.7.2
 marshmallow==3.20.1
 multidict==6.0.4
