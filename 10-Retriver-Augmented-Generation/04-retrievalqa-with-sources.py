@@ -24,7 +24,6 @@ qa = RetrievalQA.from_chain_type(
     llm=model,
     chain_type="stuff",
     retriever=retriever,
-    return_source_documents=True,
 )
 
 query = "who was ghengis khan?"
