@@ -24,8 +24,11 @@ qa = RetrievalQA.from_chain_type(
     llm=model,
     chain_type="stuff",
     retriever=retriever,
+    return_source_documents=True,
 )
 
 query = "who was ghengis khan?"
-response = qa.run(query)
+response = qa({"query": query})
 print(response)
+source_documents = response["source_documents"]
+print(type(source_documents))

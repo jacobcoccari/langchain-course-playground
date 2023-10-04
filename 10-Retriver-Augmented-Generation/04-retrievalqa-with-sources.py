@@ -22,10 +22,11 @@ model = ChatOpenAI()
 
 qa = RetrievalQA.from_chain_type(
     llm=model,
-    chain_type="map_reduce",
+    chain_type="stuff",
     retriever=retriever,
+    return_source_documents=True,
 )
 
 query = "who was ghengis khan?"
-response = qa.run(query)
-print(response)
+response = qa(query)
+print(response.metadataa)
