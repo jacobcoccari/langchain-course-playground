@@ -28,4 +28,4 @@ qa = RetrievalQA.from_chain_type(
 
 query = "who was ghengis khan?"
 response = qa(query)
-print(response.metadataa)
+print(response.metadata)

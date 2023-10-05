@@ -1,1 +1,1 @@
-map_reduce
+from langchain.embeddings import HuggingFaceInstructEmbeddings
