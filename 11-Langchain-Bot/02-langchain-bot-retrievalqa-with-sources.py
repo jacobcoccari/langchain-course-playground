@@ -14,6 +14,12 @@ embedding_function = OpenAIEmbeddings()
 
 
 def generate_assistant_response(prompt):
+    prompt = (
+        """You are a helpful and friendly AI chatbot assistant for Langchain. \n
+    Please answer the following user query. You are helping the user learn Langchain,
+    so please speak in simple english. Question:\n"""
+        + prompt
+    )
     db = Chroma(
         persist_directory="./11-Langchain-Bot/langchain_documents_db",
         embedding_function=embedding_function,
@@ -43,8 +49,12 @@ def format_source_string(response):
     source_string = """\n___\n ### Sources: \n ```python
     """
     for source_document in unique_source_documents:
-        source_string = source_string + source_document + "/n"
-    source_string = source_string + "```"
+        source_string = (
+            source_string
+            + source_document
+            + """
+            """
+        )
     return source_string
 
 
