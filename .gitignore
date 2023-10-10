@@ -8,3 +8,5 @@ speech-embeddings-db
 crash-course-db
 movies-db
 langchain_documents_db
+.csv
+.pkl

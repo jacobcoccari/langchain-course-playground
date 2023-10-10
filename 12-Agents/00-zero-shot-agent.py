@@ -8,7 +8,7 @@ load_dotenv()
 
 model = ChatOpenAI(temperature=0, model="gpt-3.5-turbo")
 
-tools = load_tools(["wikipedia", "llm-math"], llm=model)
+tools = load_tools(["llm-math"], llm=model)
 
 agent = initialize_agent(
     tools,
