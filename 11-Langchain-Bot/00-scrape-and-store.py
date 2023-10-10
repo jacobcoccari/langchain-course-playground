@@ -5,24 +5,20 @@ import pickle
 import pdb
 
 
-def tag_visible(element):
-    parent_names = ["style", "script", "head", "title", "meta", "[document]"]
-    class_names = ["navbar", "footer"]
-    print("-------------")
-    print(element.parent.name)
-    # breakpoint()
-    if element.parent.name in parent_names:
-        return False
-    print(element.parent.attrs)
-    print(element.parent.has_attr("navbar__item"))
-    return True
-
-
 def text_from_html(body):
     soup = BeautifulSoup(body, "html.parser")
-    texts = soup.findAll(text=True)
-    visible_texts = filter(tag_visible, texts)
-    return " ".join(t.strip() for t in visible_texts)
+    print(soup)
+    [s.extract() for s in soup(["style", "script", "[document]", "head", "title"])]
+    [s.decompose() for s in soup.find_all("div", {"class": "sidebarViewport_Xe31"})]
+    [s.decompose() for s in soup.find_all("nav", {"class": "navbar navbar--fixed-top"})]
+    [s.decompose() for s in soup.find_all("div", {"class": "col col--3"})]
+    [
+        s.decompose()
+        for s in soup.find_all("nav", {"class": "pagination-nav docusaurus-mt-lg"})
+    ]
+    [s.decompose() for s in soup.find_all("footer")]
+    visible_text = soup.getText()
+    print(visible_text)
 
 
 def load_csv():
