@@ -41,7 +41,12 @@ def read_documentation():
     # print(new_memory_load)
 
     docs = character_text_splitter.split_documents(new_memory_load)
-    embed_document(docs)
+    for doc in docs:
+        print(doc)
+        db.add_documents([doc])
+        print("+")
+        time.sleep(0.001)
+        db.persist()
 
 
 def read_source_code():
@@ -54,12 +59,11 @@ def read_source_code():
     docs = loader.load()
     # print(docs)
     python_docs = python_splitter.split_documents(docs)
-    embed_document(python_docs)
-
-
-def embed_document(list_of_documents):
-    for doc in list_of_documents:
-        print(doc)
+    for doc in python_docs:
+        doc.metadata["source"] = doc.metadata["source"].replace(
+            "11-Langchain-Bot", "https://github.com/langchain-ai/langchain"
+        )
+        print(doc.metadata["source"])
         db.add_documents([doc])
         print("+")
         time.sleep(0.001)
